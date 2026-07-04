@@ -1,8 +1,8 @@
 import { TRANSLATIONS } from "@/translations";
-import { ChatMessage } from "@/types";
+import { ChatMessage } from "@/types/types";
 import { Bot, RefreshCw, Send, User, X, Zap } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 interface AiAssistantDrawerProps {
   isOpen: boolean;
@@ -32,34 +32,57 @@ export default function AiAssistantDrawer({
           "Hệ thống pin thay nóng hoạt động như thế nào?",
         ];
 
-  const [messages, setMessages] = useState<ChatMessage[]>(() => [
-    {
-      id: "welcome",
-      role: "assistant",
-      text: t.chatWelcomeMsg,
-      timestamp: new Date().toLocaleTimeString([], {
+  const welcomeTimestamp = useMemo(
+    () =>
+      new Date().toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
       }),
-    },
-  ]);
+    [],
+  );
+
+  const welcomeMessage = useMemo<ChatMessage>(
+    () => ({
+      id: "welcome",
+      role: "assistant",
+      text: t.chatWelcomeMsg,
+      timestamp: welcomeTimestamp,
+    }),
+    [t.chatWelcomeMsg, welcomeTimestamp],
+  );
+
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const displayMessages = [welcomeMessage, ...messages];
+
+  // const [messages, setMessages] = useState<ChatMessage[]>(() => [
+  //   {
+  //     id: "welcome",
+  //     role: "assistant",
+  //     text: t.chatWelcomeMsg,
+  //     timestamp: new Date().toLocaleTimeString([], {
+  //       hour: "2-digit",
+  //       minute: "2-digit",
+  //     }),
+  //   },
+  // ]);
 
   // Update welcome message if language changes
-  useEffect(() => {
-    setMessages((prev) => {
-      if (prev.length === 1 && prev[0].id === "welcome") {
-        return [
-          {
-            id: "welcome",
-            role: "assistant",
-            text: t.chatWelcomeMsg,
-            timestamp: prev[0].timestamp,
-          },
-        ];
-      }
-      return prev;
-    });
-  }, [lang, t.chatWelcomeMsg]);
+  // useEffect(() => {
+  //   setMessages((prev) => {
+  //     if (prev.length === 1 && prev[0].id === "welcome") {
+  //       return [
+  //         {
+  //           id: "welcome",
+  //           role: "assistant",
+  //           text: t.chatWelcomeMsg,
+  //           timestamp: prev[0].timestamp,
+  //         },
+  //       ];
+  //     }
+  //     return prev;
+  //   });
+  // }, [lang, t.chatWelcomeMsg]);
+
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -128,6 +151,7 @@ export default function AiAssistantDrawer({
       };
 
       setMessages((prev) => [...prev, assistantMsg]);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(
         err.message ||
@@ -195,7 +219,7 @@ export default function AiAssistantDrawer({
               id="chat-messages-area"
               className="flex-1 overflow-y-auto p-4 space-y-4 bg-neutral-50 dark:bg-neutral-950/40"
             >
-              {messages.map((msg) => (
+              {displayMessages.map((msg) => (
                 <div
                   key={msg.id}
                   id={`chat-bubble-${msg.id}`}

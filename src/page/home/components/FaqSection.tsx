@@ -1,5 +1,5 @@
 import Accordion from "@/components/Accordion";
-import type { FAQItem } from "@/types";
+import type { FAQItem } from "@/types/types";
 import type { Translation } from "@/translations";
 
 interface FaqSectionProps {

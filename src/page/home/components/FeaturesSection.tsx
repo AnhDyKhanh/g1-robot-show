@@ -1,6 +1,6 @@
 import { ArrowRight } from "lucide-react";
-import { ICON_MAP } from "@/icons/iconMap";
-import type { Feature } from "@/types";
+import { ICON_MAP } from "@/utils/icons/iconMap";
+import type { Feature } from "@/types/types";
 import type { Translation } from "@/translations";
 
 interface FeaturesSectionProps {
@@ -55,8 +55,7 @@ export function FeaturesSection({
                   className="text-xs font-bold text-neutral-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1 cursor-pointer"
                   onClick={onChatOpen}
                 >
-                  {t.featuresConsult}{" "}
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  {t.featuresConsult} <ArrowRight className="w-3.5 h-3.5" />
                 </span>
               </div>
             </div>

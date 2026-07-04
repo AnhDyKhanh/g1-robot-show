@@ -1,5 +1,5 @@
 import { Star } from "lucide-react";
-import type { Review } from "@/types";
+import type { Review } from "@/types/types";
 import type { Translation } from "@/translations";
 
 interface TestimonialsSectionProps {
@@ -30,10 +30,7 @@ export function TestimonialsSection({ t, reviews }: TestimonialsSectionProps) {
               <div className="space-y-4">
                 <div className="flex gap-1 text-amber-500">
                   {[...Array(rev.rating)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="w-4 h-4 fill-amber-500"
-                    />
+                    <Star key={i} className="w-4 h-4 fill-amber-500" />
                   ))}
                 </div>
                 <p className="text-sm text-neutral-600 dark:text-neutral-400 italic leading-relaxed">
