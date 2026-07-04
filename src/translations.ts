@@ -189,7 +189,7 @@ export const TRANSLATIONS = {
     heroTitlePart1: "Unitree G1",
     heroTitlePart2: "Tương lai chuyển động giống như bạn",
     heroDescription: "G1 là một nền tảng robot hình người siêu di động, có khả năng gập gọn, sở hữu 43 bậc tự do (D.O.F), đôi tay khéo léo phản hồi xúc giác và trí tuệ nhân tạo học tăng cường tiên tiến. Giá khởi điểm từ 16.000 USD.",
-    btnReserve: "Cấu hình & Đặt chỗ",
+    btnReserve: "Cấu hình & Đặt hàng",
     btnChatAdvisor: "Tham khảo Chuyên gia AI",
     metricHeight: "Chiều cao Hoạt động",
     metricHeightDesc: "Cao 690 mm khi gập lại",
