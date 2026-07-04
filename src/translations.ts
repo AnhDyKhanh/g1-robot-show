@@ -1,3 +1,6 @@
+import inIndustryRobot from "@/assets/images/in-industry-img.webp";
+import inServiceRobot from "@/assets/images/services-robot-img.jpg";
+
 export const TRANSLATIONS = {
   en: {
     // Header & Navigation
@@ -431,16 +434,16 @@ export const getLocalizedApplications = (lang: 'en' | 'vi') => {
       {
         id: 'precision',
         tag: 'CÔNG NGHIỆP',
-        title: 'Vận hành Chính xác Tự động',
+        title: 'Vận hành Chính xác & Tự động',
         description: 'Thực hiện các tác vụ lặp đi lặp lại phức tạp trong nhà máy chế tạo và hậu cần mà không gặp mệt mỏi.',
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCgJLOup4UYYm4gXHcB7pZMcodaMpH6FfrFHLrY5sSLsekHHh5h-s1IFcooNXgXAeqfDWP9GokLCfg4vxqWK7N9p7eVR-7EFKH_CLnvdKBbGGYIch01fGoP6y39hDmHJ8oKdsB_hMReT6c6KhuzmOaaIXJKGYJVCdE0Eopb3h21wH55DC8lVe_29OMdhtM1s1M41iMrV0SHFI9wn8Wu_ssBVQ0JJOGQBtFBcBnx9RrhiTcG8nSY1SVXLJS_yViQuVPVcAv_FPkeJEU'
+        image: inIndustryRobot
       },
       {
         id: 'service',
         tag: 'DỊCH VỤ',
         title: 'Tiêu chuẩn Dịch vụ Hoàn hảo',
         description: 'Nâng tầm dịch vụ khách sạn và lễ tân doanh nghiệp với tương tác thông minh như người thật.',
-        image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDp6iVW4FaJ_D9RTE4sgtkWv83ucCGME2i3oG-UEZzOOTU19VKgbaOWT42LX_z7JdNGnW4wafAzJrTk0_L6ygNwZLhSh_8QYlpAkxV9fGiXwM7lHGtoDUH26zT1l7JFFDPG99RHLkWjKOLKzxu4850Y8Cde_bFHFU9J2ZdjnYKKN4h_o76XiOVff5MV6adf2Mc26ef4BsynpIfe4QuugNU-vJf8HRgfNYT2_omz40E0vYw5BX-OI3jf0hjo0224aUdr7C8FAp_k_T0'
+        image: inServiceRobot
       }
     ];
   }
@@ -450,14 +453,14 @@ export const getLocalizedApplications = (lang: 'en' | 'vi') => {
       tag: 'INDUSTRIAL',
       title: 'Automated Precision',
       description: 'Performing complex repetitive tasks in manufacturing and logistics with zero fatigue.',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCgJLOup4UYYm4gXHcB7pZMcodaMpH6FfrFHLrY5sSLsekHHh5h-s1IFcooNXgXAeqfDWP9GokLCfg4vxqWK7N9p7eVR-7EFKH_CLnvdKBbGGYIch01fGoP6y39hDmHJ8oKdsB_hMReT6c6KhuzmOaaIXJKGYJVCdE0Eopb3h21wH55DC8lVe_29OMdhtM1s1M41iMrV0SHFI9wn8Wu_ssBVQ0JJOGQBtFBcBnx9RrhiTcG8nSY1SVXLJS_yViQuVPVcAv_FPkeJEU'
+      image: inIndustryRobot
     },
     {
       id: 'service',
       tag: 'SERVICE',
       title: 'Service Excellence',
       description: 'Enhancing hospitality and concierge services with intelligent human interaction.',
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDp6iVW4FaJ_D9RTE4sgtkWv83ucCGME2i3oG-UEZzOOTU19VKgbaOWT42LX_z7JdNGnW4wafAzJrTk0_L6ygNwZLhSh_8QYlpAkxV9fGiXwM7lHGtoDUH26zT1l7JFFDPG99RHLkWjKOLKzxu4850Y8Cde_bFHFU9J2ZdjnYKKN4h_o76XiOVff5MV6adf2Mc26ef4BsynpIfe4QuugNU-vJf8HRgfNYT2_omz40E0vYw5BX-OI3jf0hjo0224aUdr7C8FAp_k_T0'
+      image: inServiceRobot
     }
   ];
 };
