@@ -35,10 +35,12 @@ export function GallerySection({ t, onImageSelect }: GallerySectionProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
           {GALLERY.map((img) => (
-            <div
+            <button
+              type="button"
               key={img.id}
               id={`gallery-thumb-${img.id}`}
               onClick={() => onImageSelect(img)}
+              aria-label={img.title}
               className={`group relative overflow-hidden rounded-2xl border border-neutral-200/60 dark:border-neutral-800/60 cursor-pointer h-72 sm:h-80 md:h-96 ${img.spanClass}`}
             >
               <img
@@ -55,7 +57,7 @@ export function GallerySection({ t, onImageSelect }: GallerySectionProps) {
                   {img.alt}
                 </p>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </div>

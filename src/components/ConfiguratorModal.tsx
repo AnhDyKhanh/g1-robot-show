@@ -10,7 +10,7 @@ import {
   X,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface ConfiguratorModalProps {
   isOpen: boolean;
@@ -49,6 +49,37 @@ export default function ConfiguratorModal({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [submitResult, setSubmitResult] = useState<any | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
+  const wasOpenRef = useRef(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      if (!wasOpenRef.current) {
+        triggerRef.current = document.activeElement as HTMLElement;
+        requestAnimationFrame(() => closeBtnRef.current?.focus());
+      }
+      wasOpenRef.current = true;
+    } else {
+      if (wasOpenRef.current && triggerRef.current) {
+        triggerRef.current.focus();
+      }
+      triggerRef.current = null;
+      wasOpenRef.current = false;
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
 
   // Price Calculations
   const modelPrice = config.model === "standard" ? 16000 : 22000;
@@ -152,6 +183,9 @@ export default function ConfiguratorModal({
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
             <motion.div
               id="configurator-modal"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="configurator-modal-title"
               initial={{ scale: 0.95, y: 15, opacity: 0 }}
               animate={{ scale: 1, y: 0, opacity: 1 }}
               exit={{ scale: 0.95, y: 15, opacity: 0 }}
@@ -166,14 +200,19 @@ export default function ConfiguratorModal({
                     <span className="text-xs font-bold text-blue-600 dark:text-blue-400 tracking-wider uppercase">
                       {t.configModalPreorder}
                     </span>
-                    <h2 className="text-2xl font-extrabold text-neutral-900 dark:text-white tracking-tight mt-0.5">
+                    <h2
+                      id="configurator-modal-title"
+                      className="text-2xl font-extrabold text-neutral-900 dark:text-white tracking-tight mt-0.5"
+                    >
                       {t.configModalTitle}
                     </h2>
                   </div>
                   {step < 3 && (
                     <button
+                      ref={closeBtnRef}
                       id="close-config-btn"
                       onClick={onClose}
+                      aria-label={lang === "en" ? "Close" : "Đóng"}
                       className="p-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full transition-colors text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
                     >
                       <X className="w-5 h-5" />

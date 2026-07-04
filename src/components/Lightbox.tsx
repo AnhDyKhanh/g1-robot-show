@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { X, ArrowLeft, ArrowRight, Info } from "lucide-react";
 
@@ -19,6 +20,37 @@ export default function Lightbox({
   onPrev,
   onNext,
 }: LightboxProps) {
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
+  const wasOpenRef = useRef(false);
+
+  useEffect(() => {
+    if (image) {
+      if (!wasOpenRef.current) {
+        triggerRef.current = document.activeElement as HTMLElement;
+        requestAnimationFrame(() => closeBtnRef.current?.focus());
+      }
+      wasOpenRef.current = true;
+    } else {
+      if (wasOpenRef.current && triggerRef.current) {
+        triggerRef.current.focus();
+      }
+      triggerRef.current = null;
+      wasOpenRef.current = false;
+    }
+  }, [image]);
+
+  useEffect(() => {
+    if (!image) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [image, onClose]);
+
   return (
     <AnimatePresence>
       {image && (
@@ -34,15 +66,22 @@ export default function Lightbox({
           />
 
           {/* Centered Viewer */}
-          <div className="fixed inset-0 z-55 flex flex-col justify-between p-4 md:p-8 pointer-events-none">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label={image.title}
+            className="fixed inset-0 z-55 flex flex-col justify-between p-4 md:p-8 pointer-events-none"
+          >
             {/* Header controls */}
             <div className="flex justify-between items-center w-full max-w-6xl mx-auto pointer-events-auto">
               <h3 className="text-white text-base md:text-lg font-bold tracking-tight">
                 {image.title}
               </h3>
               <button
+                ref={closeBtnRef}
                 id="close-lightbox-btn"
                 onClick={onClose}
+                aria-label="Close"
                 className="p-2 bg-neutral-900/60 hover:bg-neutral-800 text-neutral-300 hover:text-white rounded-full transition-all border border-neutral-800 focus:outline-none"
               >
                 <X className="w-5 h-5" />
@@ -56,6 +95,7 @@ export default function Lightbox({
                 <button
                   id="prev-lightbox-btn"
                   onClick={onPrev}
+                  aria-label="Previous image"
                   className="absolute left-0 md:-left-16 p-3 bg-neutral-900/40 hover:bg-neutral-800/80 text-white rounded-full transition-all border border-neutral-800/50 pointer-events-auto focus:outline-none hidden sm:block"
                 >
                   <ArrowLeft className="w-5 h-5" />
@@ -83,6 +123,7 @@ export default function Lightbox({
                 <button
                   id="next-lightbox-btn"
                   onClick={onNext}
+                  aria-label="Next image"
                   className="absolute right-0 md:-right-16 p-3 bg-neutral-900/40 hover:bg-neutral-800/80 text-white rounded-full transition-all border border-neutral-800/50 pointer-events-auto focus:outline-none hidden sm:block"
                 >
                   <ArrowRight className="w-5 h-5" />
