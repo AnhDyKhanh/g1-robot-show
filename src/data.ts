@@ -1,4 +1,8 @@
 import { Feature, SpecRow, Review, FAQItem } from "@/types/types";
+import overview1 from "@/assets/images/overview-1.webp";
+import overview2 from "@/assets/images/overview-2.webp";
+import overview3 from "@/assets/images/overview-3.webp";
+import overview4 from "@/assets/images/overview-4.jpg";
 
 export const HERO_IMAGE =
   "https://lh3.googleusercontent.com/aida-public/AB6AXuDssn0SzuRTGC1x7yyxtyq3LwuYiTakKrfOSAGBmNoklClVVLwujExRD1nsYxywz3Z6n06y0dygYIHPtcxR3yb4srV9vI7KU6S78KfJsTvXRPdTkPGIw1LkqLIvK6W_ENHEKtjdM_CrWD1iaTuZfEaX00DfkVtfKkstMMU9kIJCXfdHn4ZQZwKCTxPsSnRlFQYvv6Ng-lj-zJCQ9q_vdTdFmUv30LfSNRApah1gBysnfxU5yyYMP65ByPUKfeJTr2aYDnAz0mKmwqM";
@@ -83,22 +87,29 @@ export const GALLERY = [
     id: "g1",
     title: "G1 Studio Portrait",
     alt: "A cinematic, full-body shot of the Unitree G1 standing in a vast white studio space.",
-    url: "https://lh3.googleusercontent.com/aida-public/AB6AXuBeeHXJgkJvwqFUHK0NcXGgzg5i0BHSiHQ4K1rUZtxQUR-K_GZhdyzxQFFaOsa8mMQtb0MEcthzpjrBnQDSZBrTMF1zsZr6Lti3l2eUUsWt9DawqE8SSL3c1LDFcCx11D3qM5aGaj3LTOe-bmBfJL2O0YlPzc3mrJsaGAzE3lW6xdOUGiF8W23RFizxJ29jc68m6iGNXF-5wZ6R6Nn5I177DQWMlG0KNRFpNqEDWa2edziwymryef2kd_z4FsZJijmnVF0ptgaT3v8",
+    url: overview1,
     spanClass: "md:col-span-8",
   },
   {
     id: "g2",
     title: "Dexterous Manipulation",
     alt: "Detailed shot of the multi-fingered hand showing tactile sensors and glowing blue accents.",
-    url: "https://lh3.googleusercontent.com/aida-public/AB6AXuDQpct0Uq2YS4vKZg1S39I1bMsN2fm4BRt4rwNiJDZvYJ0YBOxtgxCCO7z9JrwXGm-WY4xH5Bx8J3aZAlRk5lCyZtFItNh9SQlyT_4vnd78mdG4keVzIDakrnXAZhaXrNyqDmvvs60rTVCw1KRCyNiBquqoEB3HBXSy57jtalL8tsxfodoZiWam9POiy_1NtbJOmuDFVB3sWaIaPvVTXmC-W3gT7hPlARCp43CQAhp2rl4ddT4ChzJx9AV4UAv7Ge8pxIcHBkp9xhw",
+    url: overview2,
     spanClass: "md:col-span-4",
   },
   {
     id: "g3",
     title: "Technical Schematic",
     alt: "Blueprint-style cybernetic schematic of the robot skeletal joints and sensors.",
-    url: "https://lh3.googleusercontent.com/aida-public/AB6AXuAOmzJmoAVjr-Q3StWbPP4QQdTZs_KqSVgW2rQ6GQWW0cDqvro5sXSasDcaDnS4UN95TMkwQEyYJ0dQ_LkACWjkV6RQuWJPHkc2yj8HSgAGUvHBHgfHxPM3RJh2RYIfMLkdb74s2Eqx2ielSrwUrK650BtJrjZnkcYW981fVuScWRhI2Mg-_UWNkKi8AmCEXIl3DuPrV5wJ8V4ljLo4O3PIMtHKBcArkSB3zvdNrDb4Pfxnmc1xBQPPZVW04GLqiilyr-YGkURrKKo",
+    url: overview3,
     spanClass: "md:col-span-4",
+  },
+  {
+    id: "g4",
+    title: "Technical Schematic",
+    alt: "A cinematic, full-body shot of the Unitree G1 standing in a vast white studio space.",
+    url: overview4,
+    spanClass: "md:col-span-8",
   },
 ];
 

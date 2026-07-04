@@ -116,18 +116,18 @@ export default function ConfiguratorModal({
       } else {
         throw new Error(
           data.error ||
-            (lang === "vi"
-              ? "Máy chủ đã từ chối đặt trước."
-              : "Server declined pre-order reservation."),
+          (lang === "vi"
+            ? "Máy chủ đã từ chối đặt trước."
+            : "Server declined pre-order reservation."),
         );
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(
         err.message ||
-          (lang === "vi"
-            ? "Đã xảy ra lỗi không mong muốn khi gửi đơn hàng."
-            : "An unexpected pre-order submission issue occurred."),
+        (lang === "vi"
+          ? "Đã xảy ra lỗi không mong muốn khi gửi đơn hàng."
+          : "An unexpected pre-order submission issue occurred."),
       );
     } finally {
       setIsSubmitting(false);
@@ -186,11 +186,10 @@ export default function ConfiguratorModal({
                   <div className="flex items-center gap-3 mb-6 bg-neutral-50 dark:bg-neutral-950 p-2.5 rounded-xl border border-neutral-200/50 dark:border-neutral-800/50">
                     <button
                       onClick={() => setStep(1)}
-                      className={`flex-1 text-xs font-bold py-2 px-3 rounded-lg text-center transition-all ${
-                        step === 1
-                          ? "bg-neutral-900 dark:bg-blue-600 text-white"
-                          : "text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-300"
-                      }`}
+                      className={`flex-1 text-xs font-bold py-2 px-3 rounded-lg text-center transition-all ${step === 1
+                        ? "bg-neutral-900 dark:bg-blue-600 text-white"
+                        : "text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-300"
+                        }`}
                     >
                       {t.configModalStep1}
                     </button>
@@ -201,11 +200,10 @@ export default function ConfiguratorModal({
                       onClick={() => {
                         if (step === 1) setStep(2);
                       }}
-                      className={`flex-1 text-xs font-bold py-2 px-3 rounded-lg text-center transition-all ${
-                        step === 2
-                          ? "bg-neutral-900 dark:bg-blue-600 text-white"
-                          : "text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-300"
-                      }`}
+                      className={`flex-1 text-xs font-bold py-2 px-3 rounded-lg text-center transition-all ${step === 2
+                        ? "bg-neutral-900 dark:bg-blue-600 text-white"
+                        : "text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-300"
+                        }`}
                     >
                       {t.configModalStep2}
                     </button>
@@ -229,11 +227,10 @@ export default function ConfiguratorModal({
                               model: "standard",
                             }))
                           }
-                          className={`p-4 rounded-2xl border text-left transition-all relative ${
-                            config.model === "standard"
-                              ? "border-blue-600 dark:border-blue-500 bg-blue-50/40 dark:bg-blue-950/20 ring-1 ring-blue-600"
-                              : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-400"
-                          }`}
+                          className={`p-4 rounded-2xl border text-left transition-all relative ${config.model === "standard"
+                            ? "border-blue-600 dark:border-blue-500 bg-blue-50/40 dark:bg-blue-950/20 ring-1 ring-blue-600"
+                            : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-400"
+                            }`}
                         >
                           {config.model === "standard" && (
                             <span className="absolute top-3 right-3 bg-blue-600 text-white rounded-full p-0.5">
@@ -259,11 +256,10 @@ export default function ConfiguratorModal({
                               model: "developer",
                             }))
                           }
-                          className={`p-4 rounded-2xl border text-left transition-all relative ${
-                            config.model === "developer"
-                              ? "border-blue-600 dark:border-blue-500 bg-blue-50/40 dark:bg-blue-950/20 ring-1 ring-blue-600"
-                              : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-400"
-                          }`}
+                          className={`p-4 rounded-2xl border text-left transition-all relative ${config.model === "developer"
+                            ? "border-blue-600 dark:border-blue-500 bg-blue-50/40 dark:bg-blue-950/20 ring-1 ring-blue-600"
+                            : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-400"
+                            }`}
                         >
                           {config.model === "developer" && (
                             <span className="absolute top-3 right-3 bg-blue-600 text-white rounded-full p-0.5">
@@ -302,17 +298,16 @@ export default function ConfiguratorModal({
                               handsUpgrade: !prev.handsUpgrade,
                             }))
                           }
-                          className={`p-3.5 rounded-xl border flex justify-between items-center cursor-pointer transition-all ${
-                            config.handsUpgrade
-                              ? "border-neutral-900 dark:border-white bg-neutral-50 dark:bg-neutral-800/40"
-                              : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-300"
-                          }`}
+                          className={`p-3.5 rounded-xl border flex justify-between items-center cursor-pointer transition-all ${config.handsUpgrade
+                            ? "border-neutral-900 dark:border-white bg-neutral-50 dark:bg-neutral-800/40"
+                            : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-300"
+                            }`}
                         >
                           <div className="flex items-center gap-3">
                             <input
                               type="checkbox"
                               checked={config.handsUpgrade}
-                              onChange={() => {}} // handled by div click
+                              onChange={() => { }} // handled by div click
                               className="w-4.5 h-4.5 text-blue-600 dark:text-blue-400 rounded-md border-neutral-300 focus:ring-0"
                             />
                             <div>
@@ -337,17 +332,16 @@ export default function ConfiguratorModal({
                               spareBattery: !prev.spareBattery,
                             }))
                           }
-                          className={`p-3.5 rounded-xl border flex justify-between items-center cursor-pointer transition-all ${
-                            config.spareBattery
-                              ? "border-neutral-900 dark:border-white bg-neutral-50 dark:bg-neutral-800/40"
-                              : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-300"
-                          }`}
+                          className={`p-3.5 rounded-xl border flex justify-between items-center cursor-pointer transition-all ${config.spareBattery
+                            ? "border-neutral-900 dark:border-white bg-neutral-50 dark:bg-neutral-800/40"
+                            : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-300"
+                            }`}
                         >
                           <div className="flex items-center gap-3">
                             <input
                               type="checkbox"
                               checked={config.spareBattery}
-                              onChange={() => {}}
+                              onChange={() => { }}
                               className="w-4.5 h-4.5 text-blue-600 dark:text-blue-400 rounded-md border-neutral-300 focus:ring-0"
                             />
                             <div>
@@ -372,17 +366,16 @@ export default function ConfiguratorModal({
                               protectiveCase: !prev.protectiveCase,
                             }))
                           }
-                          className={`p-3.5 rounded-xl border flex justify-between items-center cursor-pointer transition-all ${
-                            config.protectiveCase
-                              ? "border-neutral-900 dark:border-white bg-neutral-50 dark:bg-neutral-800/40"
-                              : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-300"
-                          }`}
+                          className={`p-3.5 rounded-xl border flex justify-between items-center cursor-pointer transition-all ${config.protectiveCase
+                            ? "border-neutral-900 dark:border-white bg-neutral-50 dark:bg-neutral-800/40"
+                            : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-300"
+                            }`}
                         >
                           <div className="flex items-center gap-3">
                             <input
                               type="checkbox"
                               checked={config.protectiveCase}
-                              onChange={() => {}}
+                              onChange={() => { }}
                               className="w-4.5 h-4.5 text-blue-600 dark:text-blue-400 rounded-md border-neutral-300 focus:ring-0"
                             />
                             <div>
@@ -414,11 +407,10 @@ export default function ConfiguratorModal({
                               supportPlan: "standard",
                             }))
                           }
-                          className={`p-3.5 rounded-xl border text-left cursor-pointer transition-all relative ${
-                            config.supportPlan === "standard"
-                              ? "border-blue-600 dark:border-blue-500 bg-blue-50/20 dark:bg-blue-950/20"
-                              : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-300"
-                          }`}
+                          className={`p-3.5 rounded-xl border text-left cursor-pointer transition-all relative ${config.supportPlan === "standard"
+                            ? "border-blue-600 dark:border-blue-500 bg-blue-50/20 dark:bg-blue-950/20"
+                            : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-300"
+                            }`}
                         >
                           <p className="text-sm font-bold text-neutral-900 dark:text-white">
                             {t.configModalSupportStdTitle}
@@ -438,11 +430,10 @@ export default function ConfiguratorModal({
                               supportPlan: "premium",
                             }))
                           }
-                          className={`p-3.5 rounded-xl border text-left cursor-pointer transition-all relative ${
-                            config.supportPlan === "premium"
-                              ? "border-blue-600 dark:border-blue-500 bg-blue-50/20 dark:bg-blue-950/20"
-                              : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-300"
-                          }`}
+                          className={`p-3.5 rounded-xl border text-left cursor-pointer transition-all relative ${config.supportPlan === "premium"
+                            ? "border-blue-600 dark:border-blue-500 bg-blue-50/20 dark:bg-blue-950/20"
+                            : "border-neutral-200 dark:border-neutral-800 hover:border-neutral-300"
+                            }`}
                         >
                           <div className="flex items-center gap-1.5">
                             <p className="text-sm font-bold text-neutral-900 dark:text-white">
@@ -682,19 +673,19 @@ export default function ConfiguratorModal({
                           </p>
                           <p className="text-neutral-500 dark:text-neutral-400">
                             {submitResult.customer.useCase ===
-                            "Research & Education"
+                              "Research & Education"
                               ? t.configModalUseCaseOption1
                               : submitResult.customer.useCase ===
-                                  "Concierge & Corporate Hospitality"
+                                "Concierge & Corporate Hospitality"
                                 ? t.configModalUseCaseOption2
                                 : submitResult.customer.useCase ===
-                                    "Industrial Manufacturing & Logistics"
+                                  "Industrial Manufacturing & Logistics"
                                   ? t.configModalUseCaseOption3
                                   : submitResult.customer.useCase ===
-                                      "Household & Personal Assistance"
+                                    "Household & Personal Assistance"
                                     ? t.configModalUseCaseOption4
                                     : submitResult.customer.useCase ===
-                                        "Software SDK Development"
+                                      "Software SDK Development"
                                       ? t.configModalUseCaseOption5
                                       : submitResult.customer.useCase}
                           </p>
@@ -818,46 +809,46 @@ export default function ConfiguratorModal({
                         config.spareBattery ||
                         config.protectiveCase ||
                         config.supportPlan === "premium") && (
-                        <div>
-                          <p className="text-[10px] text-neutral-400 font-bold uppercase">
-                            {t.configModalLiveUpgrades}
-                          </p>
-                          <div className="space-y-1.5 text-xs mt-1">
-                            {config.handsUpgrade && (
-                              <div className="flex justify-between text-neutral-700 dark:text-neutral-300">
-                                <span>{t.configModalHandsTitle}</span>
-                                <span className="font-mono text-neutral-500 dark:text-neutral-400">
-                                  +$3,500
-                                </span>
-                              </div>
-                            )}
-                            {config.spareBattery && (
-                              <div className="flex justify-between text-neutral-700 dark:text-neutral-300">
-                                <span>{t.configModalBatteryTitle}</span>
-                                <span className="font-mono text-neutral-500 dark:text-neutral-400">
-                                  +$1,200
-                                </span>
-                              </div>
-                            )}
-                            {config.protectiveCase && (
-                              <div className="flex justify-between text-neutral-700 dark:text-neutral-300">
-                                <span>{t.configModalCaseTitle}</span>
-                                <span className="font-mono text-neutral-500 dark:text-neutral-400">
-                                  +$850
-                                </span>
-                              </div>
-                            )}
-                            {config.supportPlan === "premium" && (
-                              <div className="flex justify-between text-neutral-700 dark:text-neutral-300">
-                                <span>{t.configModalSupportPremTitle}</span>
-                                <span className="font-mono text-neutral-500 dark:text-neutral-400">
-                                  +$2,500
-                                </span>
-                              </div>
-                            )}
+                          <div>
+                            <p className="text-[10px] text-neutral-400 font-bold uppercase">
+                              {t.configModalLiveUpgrades}
+                            </p>
+                            <div className="space-y-1.5 text-xs mt-1">
+                              {config.handsUpgrade && (
+                                <div className="flex justify-between text-neutral-700 dark:text-neutral-300">
+                                  <span>{t.configModalHandsTitle}</span>
+                                  <span className="font-mono text-neutral-500 dark:text-neutral-400">
+                                    +$3,500
+                                  </span>
+                                </div>
+                              )}
+                              {config.spareBattery && (
+                                <div className="flex justify-between text-neutral-700 dark:text-neutral-300">
+                                  <span>{t.configModalBatteryTitle}</span>
+                                  <span className="font-mono text-neutral-500 dark:text-neutral-400">
+                                    +$1,200
+                                  </span>
+                                </div>
+                              )}
+                              {config.protectiveCase && (
+                                <div className="flex justify-between text-neutral-700 dark:text-neutral-300">
+                                  <span>{t.configModalCaseTitle}</span>
+                                  <span className="font-mono text-neutral-500 dark:text-neutral-400">
+                                    +$850
+                                  </span>
+                                </div>
+                              )}
+                              {config.supportPlan === "premium" && (
+                                <div className="flex justify-between text-neutral-700 dark:text-neutral-300">
+                                  <span>{t.configModalSupportPremTitle}</span>
+                                  <span className="font-mono text-neutral-500 dark:text-neutral-400">
+                                    +$2,500
+                                  </span>
+                                </div>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      )}
+                        )}
 
                       {/* Math Summary */}
                       <div className="pt-3 border-t border-neutral-200 dark:border-neutral-800 space-y-2 text-xs">

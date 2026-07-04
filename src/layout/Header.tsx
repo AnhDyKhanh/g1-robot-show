@@ -90,7 +90,7 @@ export function Header({
           <button
             id="theme-toggle-btn"
             onClick={onThemeToggle}
-            className="hidden lg:block p-2.5 bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-all text-neutral-600 dark:text-neutral-300"
+            className="hidden p-2.5 bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-all text-neutral-600 dark:text-neutral-300"
             aria-label="Toggle visual theme mode"
           >
             {isDarkMode ? (
