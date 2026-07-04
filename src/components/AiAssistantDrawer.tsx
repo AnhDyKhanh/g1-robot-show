@@ -88,11 +88,41 @@ export default function AiAssistantDrawer({
   const [error, setError] = useState<string | null>(null);
 
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const chatInputRef = useRef<HTMLInputElement>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
+  const wasOpenRef = useRef(false);
 
   // Auto-scroll on new messages
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading]);
+
+  useEffect(() => {
+    if (isOpen) {
+      if (!wasOpenRef.current) {
+        triggerRef.current = document.activeElement as HTMLElement;
+        requestAnimationFrame(() => chatInputRef.current?.focus());
+      }
+      wasOpenRef.current = true;
+    } else {
+      if (wasOpenRef.current && triggerRef.current) {
+        triggerRef.current.focus();
+      }
+      triggerRef.current = null;
+      wasOpenRef.current = false;
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
 
   const handleSend = async (textToSend: string) => {
     if (!textToSend.trim()) return;
@@ -181,6 +211,9 @@ export default function AiAssistantDrawer({
           {/* Drawer Container */}
           <motion.div
             id="assistant-drawer"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="chat-drawer-title"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -194,7 +227,10 @@ export default function AiAssistantDrawer({
                   <Bot className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-neutral-900 dark:text-white">
+                  <h3
+                    id="chat-drawer-title"
+                    className="font-bold text-neutral-900 dark:text-white"
+                  >
                     {t.chatHeaderTitle}
                   </h3>
                   <div className="flex items-center gap-1.5">
@@ -208,6 +244,9 @@ export default function AiAssistantDrawer({
               <button
                 id="close-assistant-btn"
                 onClick={onClose}
+                aria-label={
+                  lang === "en" ? "Close assistant" : "Đóng trợ lý"
+                }
                 className="p-2 text-neutral-500 hover:text-neutral-800 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-full transition-all"
               >
                 <X className="w-5 h-5" />
@@ -342,6 +381,7 @@ export default function AiAssistantDrawer({
                 className="flex gap-2"
               >
                 <input
+                  ref={chatInputRef}
                   id="chat-input-field"
                   type="text"
                   value={input}
