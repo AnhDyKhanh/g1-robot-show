@@ -1,0 +1,336 @@
+---
+alwaysApply: true
+---
+
+# Refactor Instruction cho Cursor — Unitree G1 Landing Page
+
+Dự án: **React + Vite**
+Mục tiêu: Refactor `App.tsx` đang dồn hết logic + UI vào 1 file, import icon kiểu
+`import * as LucideIcons from "lucide-react"` rất nặng, và tách các component
+dùng chung (Header, Footer...) ra khỏi component chỉ dùng riêng cho 1 page.
+
+---
+
+## 1. Cấu trúc thư mục đích
+
+```
+src/
+├── layout/                       # Layout dùng chung toàn app (Header, Footer, Shell...)
+│   ├── Header.tsx
+│   ├── Footer.tsx
+│   ├── FloatingControlDeck.tsx   # back-to-top + chat FAB, hiển thị ở mọi page
+│   └── MainLayout.tsx            # bọc <Header /> + <Outlet/children/> + <Footer />
+│
+├── components/                   # Component tái sử dụng nhiều page (không phải layout)
+│   ├── ui/                       # Atom nhỏ: Button, Badge, SectionHeading...
+│   ├── Accordion.tsx
+│   ├── ConfiguratorModal.tsx
+│   ├── AiAssistantDrawer.tsx
+│   └── Lightbox.tsx
+│
+├── page/
+│   └── home/
+│       ├── components/           # Section CHỈ dùng riêng cho trang Home
+│       │   ├── HeroSection.tsx
+│       │   ├── FeaturesSection.tsx
+│       │   ├── ApplicationsSection.tsx
+│       │   ├── ConfiguratorBanner.tsx
+│       │   ├── SpecificationsSection.tsx
+│       │   ├── GallerySection.tsx
+│       │   ├── ComparisonSection.tsx
+│       │   ├── TestimonialsSection.tsx
+│       │   ├── FaqSection.tsx
+│       │   └── NewsletterSection.tsx
+│       └── HomeLanding.tsx       # Compose các section trên, KHÔNG chứa Header/Footer
+│
+├── hooks/
+│   ├── useTheme.ts
+│   ├── useScrollSpy.ts
+│   └── useNewsletter.ts
+│
+├── icons/
+│   └── iconMap.ts                # map string -> icon component (named import)
+│
+├── data.ts
+├── types.ts
+└── translations.ts
+```
+
+> Quy tắc: mỗi page mới sau này (vd `page/about/`, `page/contact/`) đều theo
+> đúng khuôn `page/<page-name>/components` + `page/<page-name>/<PageName>.tsx`.
+> Header/Footer/FloatingControlDeck KHÔNG lặp lại trong từng page, chỉ khai báo
+> 1 lần trong `layout/MainLayout.tsx`.
+
+---
+
+## 2. Cấu hình path alias `@`
+
+Trong `vite.config.ts`, thêm resolve alias trỏ `@` -> `src`:
+
+```ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
+});
+```
+
+Trong `tsconfig.json` (hoặc `tsconfig.app.json`), thêm `baseUrl` + `paths` tương ứng
+để TypeScript/Cursor tự hiểu import:
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  }
+}
+```
+
+**Quy tắc bắt buộc:** không import kiểu `../../components/...` hay `../hooks/...`
+xuyên qua nhiều cấp thư mục. Mọi import từ `src/` trở đi phải dùng `@/`, ví dụ:
+
+```tsx
+import Header from "@/layout/Header";
+import { useTheme } from "@/hooks/useTheme";
+import { GALLERY } from "@/data";
+```
+
+Import tương đối (`./`) chỉ được dùng trong cùng 1 thư mục (vd
+`HomeLanding.tsx` import `./components/HeroSection`).
+
+---
+
+## 3. Tách icon import (ưu tiên cao)
+
+Thay `import * as LucideIcons from "lucide-react"` bằng named import cụ thể ở
+từng file cần dùng, ví dụ trong `Header.tsx`:
+
+```tsx
+import { Languages, Sun, Moon, ArrowUpRight } from "lucide-react";
+```
+
+Với icon lấy động theo tên chuỗi (`feat.iconName` trong FeaturesSection), tạo
+`src/icons/iconMap.ts`:
+
+```ts
+import {
+  HelpCircle,
+  ShieldCheck,
+  Sparkles /* ...liệt kê đủ icon đang dùng */,
+} from "lucide-react";
+
+export const ICON_MAP = {
+  HelpCircle,
+  ShieldCheck,
+  Sparkles,
+  // ...
+} as const;
+
+export type IconName = keyof typeof ICON_MAP;
+```
+
+Dùng trong `FeaturesSection.tsx`:
+
+```tsx
+import { ICON_MAP } from "@/icons/iconMap";
+
+const IconComp =
+  ICON_MAP[feat.iconName as keyof typeof ICON_MAP] ?? ICON_MAP.HelpCircle;
+```
+
+---
+
+## 4. Tách Layout dùng chung (`src/layout/`)
+
+- `Header.tsx`: toàn bộ `<header id="main-header">` hiện tại — nav, logo,
+  language toggle, theme toggle, nút "buy now". Nhận props: `lang`,
+  `onLangToggle`, `isDarkMode`, `onThemeToggle`, `activeSection`,
+  `onNavClick(id)`, `onConfigureClick`, `t`.
+- `Footer.tsx`: toàn bộ `<footer>` hiện tại. Nhận props: `t`.
+- `FloatingControlDeck.tsx`: back-to-top + chat FAB. Nhận props:
+  `showScrollTop`, `onScrollTop`, `onChatOpen`, `t`.
+- `MainLayout.tsx`: compose 3 cái trên bọc quanh nội dung page:
+
+```tsx
+export default function MainLayout({ children, ...sharedProps }: Props) {
+  return (
+    <div id="portal-root" className="min-h-screen ... flex flex-col">
+      <Header {...sharedProps} />
+      <main className="flex-grow">{children}</main>
+      <Footer t={sharedProps.t} />
+      <FloatingControlDeck {...sharedProps} />
+    </div>
+  );
+}
+```
+
+> Nếu sau này thêm React Router, `MainLayout` sẽ dùng `<Outlet />` thay cho
+> `children`. Hiện tại chưa có router thì cứ dùng `children` là đủ.
+
+---
+
+## 5. Tách section riêng của Home (`src/page/home/components/`)
+
+Mỗi `<section>` trong `<main>` (overview/hero, features, applications, banner,
+specifications, gallery, comparison, testimonials, faq, newsletter) → 1 file
+component riêng, đặt trong `src/page/home/components/`.
+
+Quy tắc:
+
+- Props tối thiểu, chỉ đúng thứ section đó cần (vd `FeaturesSection` chỉ cần
+  `features`, `t`, `onConsultClick`).
+- Callback dùng chung nhiều section (`onConfigOpen`, `onChatOpen`) truyền qua
+  props, không dùng Context nếu chưa thật sự cần thiết.
+- `NewsletterSection` nhận toàn bộ state/handler từ hook `useNewsletter` truyền
+  xuống qua props.
+
+`HomeLanding.tsx` sau khi tách chỉ còn:
+
+```tsx
+import MainLayout from "@/layout/MainLayout";
+import { useTheme } from "@/hooks/useTheme";
+import { useScrollSpy } from "@/hooks/useScrollSpy";
+import { useNewsletter } from "@/hooks/useNewsletter";
+
+import HeroSection from "./components/HeroSection";
+import FeaturesSection from "./components/FeaturesSection";
+// ...các section khác
+
+export default function HomeLanding() {
+  const [lang, setLang] = useState<"en" | "vi">("vi");
+  const { isDarkMode, toggleTheme } = useTheme();
+  const { activeSection, showScrollTop, scrollTo } = useScrollSpy(SECTION_IDS);
+  const newsletter = useNewsletter(lang);
+  const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<any | null>(null);
+
+  return (
+    <MainLayout
+      lang={lang}
+      onLangToggle={() => setLang(lang === "en" ? "vi" : "en")}
+      isDarkMode={isDarkMode}
+      onThemeToggle={toggleTheme}
+      activeSection={activeSection}
+      onNavClick={scrollTo}
+      onConfigureClick={() => setIsConfigModalOpen(true)}
+      onChatOpen={() => setIsChatOpen(true)}
+      showScrollTop={showScrollTop}
+      t={t}
+    >
+      <HeroSection ... />
+      <FeaturesSection ... />
+      {/* ...các section còn lại */}
+
+      <ConfiguratorModal isOpen={isConfigModalOpen} onClose={...} lang={lang} />
+      <AiAssistantDrawer isOpen={isChatOpen} onClose={...} lang={lang} />
+      <Lightbox image={selectedImage} ... />
+    </MainLayout>
+  );
+}
+```
+
+---
+
+## 6. Tách custom hooks (`src/hooks/`)
+
+- **`useTheme.ts`**: gom logic `isDarkMode` + đọc/ghi `localStorage("g1-theme")`
+  - toggle class `dark` trên `document.documentElement`. Trả về
+    `{ isDarkMode, toggleTheme }`.
+- **`useScrollSpy.ts`**: gom 2 `useEffect` scroll hiện tại (`showScrollTop` +
+  `activeSection`). Nhận vào mảng section id, trả về
+  `{ activeSection, showScrollTop, scrollTo(id) }` — hàm `scrollTo` chính là
+  `handleScrollTo` cũ, gộp vào đây cho gọn vì logic liên quan chặt với nhau.
+- **`useNewsletter.ts`**: gom `newsletterEmail`, `newsletterStatus`,
+  `handleNewsletterSubmit`. Trả về đủ state + handler để `NewsletterSection`
+  nhận qua props.
+
+`handlePrevImage` / `handleNextImage` (điều hướng Lightbox) giữ lại trong
+`HomeLanding.tsx` vì gắn chặt với `GALLERY` + `selectedImage`, không cần tách.
+
+---
+
+## 7. Xử lý Dark Mode / theme — hướng đề xuất
+
+Vấn đề với cách hiện tại: đọc/ghi trực tiếp `localStorage` bên trong
+`useEffect`, dễ gây **FOUC** (nhấp nháy sáng->tối khi load trang) vì class
+`dark` chỉ được set sau khi React mount.
+
+**Hướng xử lý đề xuất (chọn 1 trong 2, khuyến nghị phương án A):**
+
+**A. Set theme trước khi React mount (khuyến nghị)**
+Thêm 1 đoạn script inline nhỏ trong `index.html`, chạy trước khi bundle JS tải,
+đọc `localStorage("g1-theme")` (hoặc `prefers-color-scheme` nếu chưa có) và gán
+class `dark` ngay lập tức trên `<html>`:
+
+```html
+<script>
+  (function () {
+    const saved = localStorage.getItem("g1-theme");
+    const isDark = saved
+      ? saved === "dark"
+      : window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if (isDark) document.documentElement.classList.add("dark");
+  })();
+</script>
+```
+
+Khi đó `useTheme.ts` chỉ cần đọc lại giá trị này để đồng bộ state ban đầu
+(`useState(() => document.documentElement.classList.contains("dark"))`), không
+cần `useEffect` riêng để tránh nhấp nháy — `useEffect` chỉ dùng để **ghi lại**
+mỗi khi `toggleTheme` được gọi.
+
+**B. Giữ nguyên cách cũ (chỉ set sau mount)**
+Đơn giản hơn nhưng sẽ có 1 nhịp nhấp nháy nhẹ (đặc biệt trên mạng chậm). Chấp
+nhận được nếu không quá khắt khe về UX, nhưng không khuyến nghị cho landing
+page bán sản phẩm (ấn tượng đầu tiên quan trọng).
+
+→ Cursor nên implement theo **phương án A**.
+
+---
+
+## 8. Component dùng chung khác (`src/components/`)
+
+- `Accordion`, `ConfiguratorModal`, `AiAssistantDrawer`, `Lightbox`: giữ
+  nguyên vị trí nhưng convert `import * as LucideIcons` sang named import
+  (mục 3) và sửa toàn bộ import sang alias `@/`.
+- Nếu phát hiện UI lặp lại nhiều lần giữa các section (badge label uppercase,
+  nút CTA dạng pill, tiêu đề section "badge + title + desc" lặp ở hầu hết mọi
+  section) → tách thêm atom vào `src/components/ui/`, ví dụ `SectionHeading.tsx`
+  nhận props `badge`, `title`, `description` để giảm trùng lặp code.
+
+---
+
+## 9. Checklist sau khi refactor
+
+- [ ] Không còn `import * as LucideIcons` ở bất kỳ file nào.
+- [ ] Không còn import tương đối vượt quá 1 cấp (`../../`), toàn bộ dùng `@/`.
+- [ ] Header/Footer/FloatingControlDeck chỉ tồn tại 1 nơi (`src/layout/`),
+      không bị copy vào `page/home/components/`.
+- [ ] Tất cả `id="..."` (anchor cho nav/scroll spy) giữ nguyên y hệt bản gốc.
+- [ ] Dark mode không còn nhấp nháy khi load lại trang (F5).
+- [ ] `vite.config.ts` + `tsconfig.json` đã có alias `@` và build/dev chạy
+      được bình thường.
+- [ ] Theme toggle, language toggle, scroll spy nav, configurator modal, chat
+      drawer, lightbox gallery, newsletter submit đều hoạt động như bản gốc.
+
+---
+
+## 10. Lưu ý khi giao việc cho Cursor
+
+- Yêu cầu Cursor làm theo thứ tự: **(1) setup alias + layout → (2) tách hooks
+  → (3) tách icon → (4) tách từng section Home → (5) xử lý dark mode**, review
+  diff sau mỗi bước thay vì làm 1 lần toàn bộ, để dễ kiểm tra không mất logic
+  (đặc biệt là `activeSection`/`scrollTo` dùng chung giữa `Header` và
+  `useScrollSpy`).
+- Sau khi xong, chạy lại `npm run dev`, test full flow theo checklist mục 9.

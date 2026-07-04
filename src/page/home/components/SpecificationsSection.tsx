@@ -1,4 +1,4 @@
-import type { SpecRow } from "@/types";
+import type { SpecRow } from "@/types/types";
 import type { Translation } from "@/translations";
 
 interface SpecificationsSectionProps {

@@ -1,5 +1,5 @@
 import { TRANSLATIONS } from "@/translations";
-import { Configuration, CustomerDetails } from "@/types";
+import { Configuration, CustomerDetails } from "@/types/types";
 import {
   ArrowRight,
   Check,
@@ -40,12 +40,13 @@ export default function ConfiguratorModal({
   lang = "vi",
 }: ConfiguratorModalProps) {
   const t = TRANSLATIONS[lang];
-  const [step, setStep] = useState<1 | 2 | 3>(1); // 1: Select Config, 2: Customer Info, 3: Success Confirmation
+  const [step, setStep] = useState<1 | 2 | 3>(1);
   const [config, setConfig] = useState<Configuration>(DEFAULT_CONFIG);
   const [customer, setCustomer] = useState<CustomerDetails>(DEFAULT_CUSTOMER);
 
   // Submission & Loading States
   const [isSubmitting, setIsSubmitting] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [submitResult, setSubmitResult] = useState<any | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -120,6 +121,7 @@ export default function ConfiguratorModal({
               : "Server declined pre-order reservation."),
         );
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(
         err.message ||
